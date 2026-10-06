@@ -30,7 +30,7 @@
       align-items: center;
       min-height: 100vh;
       background-color: #1a1716;
-      font-family: 'Minecraft', sans-serif;
+      font-family: 'Minecraft';
       overflow: hidden;
     }
     .screen-container {
@@ -56,6 +56,28 @@
       align-items: center;
       justify-content: flex-start;
       padding-top: 15px;
+      transition: background 0.2s ease;
+    }
+    #mainScreen.jump-scare {
+      background: url('assets/jump.png') no-repeat center center !important;
+      background-size: cover !important;
+    }
+    @keyframes shake {
+      0% { transform: translate(1px, 1px) rotate(0deg); }
+      10% { transform: translate(-1px, -2px) rotate(-1deg); }
+      20% { transform: translate(-3px, 0px) rotate(1deg); }
+      30% { transform: translate(3px, 2px) rotate(0deg); }
+      40% { transform: translate(1px, -1px) rotate(1deg); }
+      50% { transform: translate(-1px, 2px) rotate(-1deg); }
+      60% { transform: translate(-3px, 1px) rotate(0deg); }
+      70% { transform: translate(3px, 1px) rotate(-1deg); }
+      80% { transform: translate(-1px, -1px) rotate(1deg); }
+      90% { transform: translate(1px, 2px) rotate(0deg); }
+      100% { transform: translate(1px, -2px) rotate(-1deg); }
+    }
+    .shaking {
+      animation: shake 0.5s;
+      animation-iteration-count: infinite;
     }
     .modal-overlay {
       position: absolute;
@@ -136,8 +158,8 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-family: 'Minecraft', sans-serif;
-      font-size: 22px;
+      font-family: 'Minecraft';
+      font-size: 20px;
       font-weight: bold;
       color: #000;
       cursor: pointer;
@@ -160,8 +182,20 @@
       height: 50px;
       font-size: 16px;
     }
+    .level-btn-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      align-items: center;
+    }
+    .level-btn {
+      width: 200px;
+      height: 45px;
+      font-size: 15px;
+    }
     .menu-heading {
-      font-size: 20px;
+      font-size: 18px;
       color: #000;
       text-align: center;
     }
@@ -169,7 +203,7 @@
       font-size: 12px;
       color: #333;
       text-align: center;
-      margin-top: 10px;
+      margin-top: 5px;
     }
     .cafbear-img {
       width: 100%;
@@ -221,6 +255,7 @@
       background: transparent;
       border: none;
       outline: none;
+      z-index: 50;
     }
     .disk-img {
       width: 100%;
@@ -235,6 +270,9 @@
     .disk-btn.playing .disk-img {
       animation: spin 3s linear infinite;
     }
+    .hidden {
+      display: none !important;
+    }
   </style>
 </head>
 <body>
@@ -244,13 +282,15 @@
         <img src="assets/brew-knowledge.png" class="title-banner-img" alt="Brew Knowledge" />
       </button>
       <div class="main-menu-buttons">
-        <button class="custom-btn" onclick="playClickSound();">Order up!</button>
+        <button class="custom-btn" onclick="playClickSound(); openMenuCheckModal();">Order up!</button>
         <button class="custom-btn" onclick="playClickSound(); openFlavorModal();">Menu</button>
         <button class="custom-btn" onclick="playClickSound();">About</button>
       </div>
+
       <button class="disk-btn" id="diskBtn" onclick="playClickSound(); toggleMusic();">
         <img src="assets/disk.png" class="disk-img" alt="Play Music" />
       </button>
+
       <div class="modal-overlay" id="welcomeModal">
         <div class="retro-window">
           <div class="window-header">
@@ -267,6 +307,7 @@
           </div>
         </div>
       </div>
+
       <div class="modal-overlay" id="flavorModal">
         <div class="retro-window">
           <div class="window-header">
@@ -284,6 +325,7 @@
           </div>
         </div>
       </div>
+
       <div class="modal-overlay" id="toppingsModal">
         <div class="retro-window">
           <div class="window-header">
@@ -304,6 +346,7 @@
           </div>
         </div>
       </div>
+
       <div class="modal-overlay" id="quizTwoModal">
         <div class="retro-window">
           <div class="window-header">
@@ -319,9 +362,72 @@
           </div>
         </div>
       </div>
+
+      <div class="modal-overlay" id="menuCheckModal">
+        <div class="retro-window">
+          <div class="window-header">
+            <div class="window-title">♡ Check</div>
+            <div class="window-controls">
+              <div class="win-btn" onclick="playClickSound();">—</div>
+              <div class="win-btn" onclick="playClickSound();">❐</div>
+              <div class="win-btn close" onclick="playClickSound(); closeMenuCheckModal();">✕</div>
+            </div>
+          </div>
+          <div class="window-body">
+            <p class="welcome-text">Have you read the Menu?</p>
+            <div class="small-btn-container">
+              <button class="custom-btn small-btn" onclick="playClickSound(); handleMenuYes();">Yes</button>
+              <button class="custom-btn small-btn" onclick="playClickSound(); handleMenuNo();">No</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-overlay" id="levelModal">
+        <div class="retro-window">
+          <div class="window-header">
+            <div class="window-title">♡ Level</div>
+            <div class="window-controls">
+              <div class="win-btn" onclick="playClickSound();">—</div>
+              <div class="win-btn" onclick="playClickSound();">❐</div>
+              <div class="win-btn close" onclick="playClickSound(); closeLevelModal();">✕</div>
+            </div>
+          </div>
+          <div class="window-body">
+            <div class="menu-heading">Choose your level</div>
+            <div class="level-btn-container">
+              <button class="custom-btn level-btn" onclick="playClickSound(); openLevelForm('https://forms.gle/XXT1poQmvs9zAVdb6');">Very light</button>
+              <button class="custom-btn level-btn" onclick="playClickSound(); openLevelForm('https://forms.gle/kB5RySmM8MpFDEEG7');">Light</button>
+              <button class="custom-btn level-btn" onclick="playClickSound(); openLevelForm('https://forms.gle/NBUsun2F8FYoNkmr6');">Perfect</button>
+              <button class="custom-btn level-btn" onclick="playClickSound(); openLevelForm('https://forms.gle/UooLUZpunxDiGNYi9');">Strong</button>
+              <button class="custom-btn level-btn" onclick="playClickSound(); openLevelForm('https://forms.gle/i1mzmmxaoNqUWM5MA');">Very strong</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-overlay" id="jumpscareModal">
+        <div class="retro-window">
+          <div class="window-header">
+            <div class="window-title" style="background: #a80000; border-bottom: 2px solid #5a0000;">⚠️ Why. Not.</div>
+            <div class="window-controls">
+              <div class="win-btn close" onclick="playClickSound(); handleLazy();">✕</div>
+            </div>
+          </div>
+          <div class="window-body" style="background: #110000; border: 2px solid #5a0000;">
+            <p class="welcome-text" style="color: #ff4444; font-size: 16px; margin-bottom: 10px;">Why. not.</p>
+            <div class="small-btn-container" style="gap: 15px;">
+              <button class="custom-btn small-btn" style="width: 120px; font-size: 12px;" onclick="playClickSound(); handleReadIt();">OKAY ILL READ IT</button>
+              <button class="custom-btn small-btn" style="width: 100px; font-size: 12px;" onclick="playClickSound(); handleLazy();">I'm lazy.</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <audio id="bgMusic" src="assets/bg.mp3" loop></audio>
     </div>
   </div>
+
   <script>
     function playClickSound(){
       try{
@@ -329,46 +435,100 @@
         sound.play().catch(function(e){});
       }catch(e){}
     }
-    const welcomeModal=document.getElementById('welcomeModal');
-    const flavorModal=document.getElementById('flavorModal');
-    const toppingsModal=document.getElementById('toppingsModal');
-    const quizTwoModal=document.getElementById('quizTwoModal');
-    const bgMusic=document.getElementById('bgMusic');
-    const diskBtn=document.getElementById('diskBtn');
-    let isPlaying=false;
 
-    function openWelcomeModal(){welcomeModal.classList.add('active');}
-    function closeWelcomeModal(){welcomeModal.classList.remove('active');}
-    function openFlavorModal(){flavorModal.classList.add('active');}
-    function closeFlavorModal(){flavorModal.classList.remove('active');}
+    const mainScreen = document.getElementById('mainScreen');
+    const welcomeModal = document.getElementById('welcomeModal');
+    const flavorModal = document.getElementById('flavorModal');
+    const toppingsModal = document.getElementById('toppingsModal');
+    const quizTwoModal = document.getElementById('quizTwoModal');
+    const menuCheckModal = document.getElementById('menuCheckModal');
+    const levelModal = document.getElementById('levelModal');
+    const jumpscareModal = document.getElementById('jumpscareModal');
+    
+    const bgMusic = document.getElementById('bgMusic');
+    const diskBtn = document.getElementById('diskBtn');
+    let isPlaying = false;
+
+    function openWelcomeModal(){ welcomeModal.classList.add('active'); }
+    function closeWelcomeModal(){ welcomeModal.classList.remove('active'); }
+    
+    function openFlavorModal(){ flavorModal.classList.add('active'); }
+    function closeFlavorModal(){ flavorModal.classList.remove('active'); }
+    
     function openToppingsModal(){
       closeFlavorModal();
       toppingsModal.classList.add('active');
     }
-    function closeToppingsModal(){toppingsModal.classList.remove('active');}
+    function closeToppingsModal(){ toppingsModal.classList.remove('active'); }
+
     function startQuizOne(){
-    closeToppingsModal();
-    window.open('https://docs.google.com/document/d/1VANo_rGW5OnFEN5xWOJe1OFYBp165zf-HpLsalHpuzI/preview', '_blank');
+      closeToppingsModal();
+      window.open('https://docs.google.com/document/d/1VANo_rGW5OnFEN5xWOJe1OFYBp165zf-HpLsalHpuzI/edit', '_blank');
     }
-    function startQuizTwo(){quizTwoModal.classList.add('active');}
-    function closeQuizTwoModal(){quizTwoModal.classList.remove('active');}
+    function startQuizTwo(){ quizTwoModal.classList.add('active'); }
+    function closeQuizTwoModal(){ quizTwoModal.classList.remove('active'); }
+
+    function openMenuCheckModal(){ menuCheckModal.classList.add('active'); }
+    function closeMenuCheckModal(){ menuCheckModal.classList.remove('active'); }
+
+    function handleMenuYes(){
+      closeMenuCheckModal();
+      levelModal.classList.add('active');
+    }
+
+    function handleMenuNo(){
+      closeMenuCheckModal();
+      mainScreen.classList.add('jump-scare', 'shaking');
+      diskBtn.classList.add('hidden');
+      
+      if(isPlaying){
+        bgMusic.pause();
+        diskBtn.classList.remove('playing');
+        isPlaying = false;
+      }
+      
+      jumpscareModal.classList.add('active');
+    }
+
+    function handleReadIt(){
+      jumpscareModal.classList.remove('active');
+      mainScreen.classList.remove('jump-scare', 'shaking');
+      diskBtn.classList.remove('hidden');
+      
+      bgMusic.play().catch(function(e){});
+      diskBtn.classList.add('playing');
+      isPlaying = true;
+
+      levelModal.classList.add('active');
+    }
+
+    function handleLazy(){
+      window.location.href = "about:blank"; 
+    }
+
+    function closeLevelModal(){ levelModal.classList.remove('active'); }
+
+    function openLevelForm(url){
+      window.open(url, '_blank');
+    }
 
     function toggleMusic(){
       if(isPlaying){
         bgMusic.pause();
         diskBtn.classList.remove('playing');
-        isPlaying=false;
+        isPlaying = false;
       }else{
         bgMusic.play().catch(function(e){});
         diskBtn.classList.add('playing');
-        isPlaying=true;
+        isPlaying = true;
       }
     }
-    document.addEventListener('visibilitychange',function(){
-      if(document.hidden&&isPlaying){
+
+    document.addEventListener('visibilitychange', function(){
+      if(document.hidden && isPlaying){
         bgMusic.pause();
         diskBtn.classList.remove('playing');
-        isPlaying=false;
+        isPlaying = false;
       }
     });
   </script>
