@@ -9,7 +9,6 @@
       font-family: 'Minecraft';
       src: url('assets/Minecraft.ttf') format('truetype');
     }
-
     * {
       box-sizing: border-box;
       margin: 0;
@@ -18,16 +17,13 @@
       outline: none;
       -webkit-tap-highlight-color: transparent;
     }
-
     button, input, div, a {
       outline: none;
       -webkit-tap-highlight-color: transparent;
     }
-
     button:focus, input:focus, .open-btn:focus, .custom-btn:focus, .disk-btn:focus {
       outline: none;
     }
-
     body {
       display: flex;
       justify-content: center;
@@ -37,7 +33,6 @@
       font-family: 'Minecraft', sans-serif;
       overflow: hidden;
     }
-
     .screen-container {
       position: relative;
       width: 100vw;
@@ -49,7 +44,6 @@
       overflow: hidden;
       background-color: #000;
     }
-
     .screen {
       position: absolute;
       inset: 0;
@@ -59,17 +53,14 @@
       opacity: 0;
       pointer-events: none;
     }
-
     .screen.active {
       opacity: 1;
       pointer-events: auto;
     }
-
     #titleScreen {
       background: url('assets/ext.png') no-repeat center center;
       background-size: cover;
     }
-
     #mainScreen {
       background: url('assets/int.png') no-repeat center center;
       background-size: cover;
@@ -77,9 +68,8 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      padding-top: 30px;
+      padding-top: 15px;
     }
-
     .open-btn {
       position: absolute;
       bottom: 180px;
@@ -97,15 +87,12 @@
       cursor: pointer;
       transition: transform 0.1s ease;
     }
-
     .open-btn:hover {
       transform: scale(1.05);
     }
-
     .open-btn:active {
       transform: scale(0.95);
     }
-
     .modal-overlay {
       position: absolute;
       inset: 0;
@@ -118,12 +105,10 @@
       transition: opacity 0.2s ease;
       z-index: 100;
     }
-
     .modal-overlay.active {
       opacity: 1;
       pointer-events: auto;
     }
-
     .retro-window {
       width: 320px;
       background-color: #f2f2f2;
@@ -132,7 +117,6 @@
       display: flex;
       flex-direction: column;
     }
-
     .window-header {
       background: linear-gradient(90deg, #71a7e2, #4779b5);
       padding: 4px 6px;
@@ -141,7 +125,6 @@
       justify-content: space-between;
       border-bottom: 2px solid #366092;
     }
-
     .window-title {
       color: white;
       font-size: 14px;
@@ -149,12 +132,10 @@
       align-items: center;
       gap: 4px;
     }
-
     .window-controls {
       display: flex;
       gap: 2px;
     }
-
     .win-btn {
       width: 16px;
       height: 14px;
@@ -169,13 +150,11 @@
       cursor: pointer;
       font-weight: bold;
     }
-
     .win-btn.close {
       background: #e81123;
       color: white;
       border: none;
     }
-
     .window-body {
       padding: 20px;
       display: flex;
@@ -183,7 +162,6 @@
       align-items: center;
       gap: 15px;
     }
-
     .custom-btn {
       width: 216px;
       height: 60px;
@@ -201,47 +179,39 @@
       cursor: pointer;
       transition: transform 0.1s ease;
     }
-
     .custom-btn:hover {
       transform: scale(1.03);
     }
-
     .custom-btn:active {
       transform: scale(0.97);
     }
-
     .small-btn-container {
       display: flex;
       gap: 10px;
       justify-content: center;
       width: 100%;
     }
-
     .small-btn {
       width: 100px;
       height: 50px;
       font-size: 16px;
     }
-
     .menu-heading {
       font-size: 20px;
       color: #000;
       text-align: center;
     }
-
     .menu-subtext {
       font-size: 12px;
       color: #333;
       text-align: center;
       margin-top: 10px;
     }
-
     .password-title {
       font-size: 22px;
       color: #000;
       margin-bottom: 5px;
     }
-
     .password-input {
       width: 100%;
       padding: 8px;
@@ -252,83 +222,70 @@
       text-align: center;
       background: #fff;
     }
-
     .hint-text {
       font-size: 14px;
       color: #111;
       text-align: center;
       margin-top: 5px;
     }
-
     .guide-img, .meow-img, .cafbear-img {
       width: 100%;
       height: auto;
       display: block;
       image-rendering: pixelated;
     }
-
     .welcome-text {
       font-size: 14px;
       color: #000;
       text-align: center;
       line-height: 1.4;
     }
-
     .guide-nav-container {
       width: 100%;
       display: flex;
       justify-content: flex-end;
       margin-top: 10px;
     }
-
     .nav-btn {
       width: 216px;
       height: 60px;
       font-size: 14px;
     }
-
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
       20%, 60% { transform: translateX(-8px); }
       40%, 80% { transform: translateX(8px); }
     }
-
     .shake {
       animation: shake 0.3s ease-in-out;
     }
-
     .title-banner-btn {
       background: none;
       border: none;
       padding: 0;
       cursor: pointer;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       outline: none;
       transition: transform 0.1s ease;
     }
-
     .title-banner-btn:hover {
       transform: scale(1.03);
     }
-
     .title-banner-btn:active {
       transform: scale(0.97);
     }
-
     .title-banner-img {
       width: 260px;
       height: auto;
       display: block;
       image-rendering: pixelated;
     }
-
     .main-menu-buttons {
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 24px;
       align-items: center;
     }
-
     .disk-btn {
       position: absolute;
       bottom: 25px;
@@ -341,30 +298,25 @@
       border: none;
       outline: none;
     }
-
     .disk-img {
       width: 100%;
       height: 100%;
       object-fit: contain;
       image-rendering: pixelated;
     }
-
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-
     .disk-btn.playing .disk-img {
       animation: spin 3s linear infinite;
     }
   </style>
 </head>
 <body>
-
   <div class="screen-container">
     <div class="screen active" id="titleScreen">
       <div class="open-btn" onclick="playClickSound(); openMenuModal();">Open</div>
-      
       <div class="modal-overlay" id="menuModal">
         <div class="retro-window">
           <div class="window-header">
@@ -382,7 +334,6 @@
           </div>
         </div>
       </div>
-
       <div class="modal-overlay" id="passwordModal">
         <div class="retro-window" id="passWindow">
           <div class="window-header">
@@ -400,7 +351,6 @@
           </div>
         </div>
       </div>
-
       <div class="modal-overlay" id="guideModal">
         <div class="retro-window">
           <div class="window-header">
@@ -419,7 +369,6 @@
           </div>
         </div>
       </div>
-
       <div class="modal-overlay" id="meowModal">
         <div class="retro-window">
           <div class="window-header">
@@ -436,7 +385,6 @@
         </div>
       </div>
     </div>
-
     <div class="screen" id="mainScreen">
       <button class="title-banner-btn" onclick="playClickSound(); openWelcomeModal();">
         <img src="assets/brew-knowledge.png" class="title-banner-img" alt="Brew Knowledge" />
@@ -449,7 +397,6 @@
       <button class="disk-btn" id="diskBtn" onclick="playClickSound(); toggleMusic();">
         <img src="assets/disk.png" class="disk-img" alt="Play Music" />
       </button>
-
       <div class="modal-overlay" id="welcomeModal">
         <div class="retro-window">
           <div class="window-header">
@@ -466,7 +413,6 @@
           </div>
         </div>
       </div>
-
       <div class="modal-overlay" id="flavorModal">
         <div class="retro-window">
           <div class="window-header">
@@ -484,7 +430,6 @@
           </div>
         </div>
       </div>
-
       <div class="modal-overlay" id="toppingsModal">
         <div class="retro-window">
           <div class="window-header">
@@ -505,7 +450,6 @@
           </div>
         </div>
       </div>
-
       <div class="modal-overlay" id="quizTwoModal">
         <div class="retro-window">
           <div class="window-header">
@@ -521,158 +465,115 @@
           </div>
         </div>
       </div>
-
       <audio id="bgMusic" src="assets/bg.mp3" loop></audio>
     </div>
   </div>
-
   <script>
-    function playClickSound() {
-      try {
-        const sound = new Audio('assets/clicky.mp3');
-        sound.play().catch(function(e) {});
-      } catch (e) {}
+    function playClickSound(){
+      try{
+        const sound=new Audio('assets/clicky.mp3');
+        sound.play().catch(function(e){});
+      }catch(e){}
     }
-
-    const titleScreen = document.getElementById('titleScreen');
-    const mainScreen = document.getElementById('mainScreen');
-    const menuModal = document.getElementById('menuModal');
-    const passwordModal = document.getElementById('passwordModal');
-    const passwordInput = document.getElementById('passwordInput');
-    const passWindow = document.getElementById('passWindow');
-    const guideModal = document.getElementById('guideModal');
-    const guideImage = document.getElementById('guideImage');
-    const guideNavBtn = document.getElementById('guideNavBtn');
-    const meowModal = document.getElementById('meowModal');
-    const welcomeModal = document.getElementById('welcomeModal');
-    const flavorModal = document.getElementById('flavorModal');
-    const toppingsModal = document.getElementById('toppingsModal');
-    const quizTwoModal = document.getElementById('quizTwoModal');
-    const bgMusic = document.getElementById('bgMusic');
-    const diskBtn = document.getElementById('diskBtn');
-    let isPlaying = false;
-
-    function openMenuModal() {
-      menuModal.classList.add('active');
-    }
-
-    function closeMenuModal() {
-      menuModal.classList.remove('active');
-    }
-
-    function openPasswordModal() {
+    const titleScreen=document.getElementById('titleScreen');
+    const mainScreen=document.getElementById('mainScreen');
+    const menuModal=document.getElementById('menuModal');
+    const passwordModal=document.getElementById('passwordModal');
+    const passwordInput=document.getElementById('passwordInput');
+    const passWindow=document.getElementById('passWindow');
+    const guideModal=document.getElementById('guideModal');
+    const guideImage=document.getElementById('guideImage');
+    const guideNavBtn=document.getElementById('guideNavBtn');
+    const meowModal=document.getElementById('meowModal');
+    const welcomeModal=document.getElementById('welcomeModal');
+    const flavorModal=document.getElementById('flavorModal');
+    const toppingsModal=document.getElementById('toppingsModal');
+    const quizTwoModal=document.getElementById('quizTwoModal');
+    const bgMusic=document.getElementById('bgMusic');
+    const diskBtn=document.getElementById('diskBtn');
+    let isPlaying=false;
+    function openMenuModal(){menuModal.classList.add('active');}
+    function closeMenuModal(){menuModal.classList.remove('active');}
+    function openPasswordModal(){
       menuModal.classList.remove('active');
       passwordModal.classList.add('active');
-      passwordInput.value = '';
+      passwordInput.value='';
       passwordInput.focus();
     }
-
-    function closePasswordModal() {
-      passwordModal.classList.remove('active');
-    }
-
-    let currentGuidePage = 1;
-
-    function openGuideModal() {
+    function closePasswordModal(){passwordModal.classList.remove('active');}
+    let currentGuidePage=1;
+    function openGuideModal(){
       menuModal.classList.remove('active');
       guideModal.classList.add('active');
-      currentGuidePage = 1;
-      guideImage.src = 'assets/guide1.png';
-      guideNavBtn.innerText = '>>>next';
+      currentGuidePage=1;
+      guideImage.src='assets/guide1.png';
+      guideNavBtn.innerText='>>>next';
     }
-
-    function closeGuideModal() {
-      guideModal.classList.remove('active');
-    }
-
-    function toggleGuidePage() {
-      if (currentGuidePage === 1) {
-        currentGuidePage = 2;
-        guideImage.src = 'assets/guide2.png';
-        guideNavBtn.innerText = '<<<back';
-      } else {
-        currentGuidePage = 1;
-        guideImage.src = 'assets/guide1.png';
-        guideNavBtn.innerText = '>>>next';
+    function closeGuideModal(){guideModal.classList.remove('active');}
+    function toggleGuidePage(){
+      if(currentGuidePage===1){
+        currentGuidePage=2;
+        guideImage.src='assets/guide2.png';
+        guideNavBtn.innerText='<<<back';
+      }else{
+        currentGuidePage=1;
+        guideImage.src='assets/guide1.png';
+        guideNavBtn.innerText='>>>next';
       }
     }
-
-    function openMeowModal() {
+    function openMeowModal(){
       menuModal.classList.remove('active');
       meowModal.classList.add('active');
     }
-
-    function closeMeowModal() {
-      meowModal.classList.remove('active');
-    }
-
-    function openWelcomeModal() {
-      welcomeModal.classList.add('active');
-    }
-
-    function closeWelcomeModal() {
-      welcomeModal.classList.remove('active');
-    }
-
-    function openFlavorModal() {
-      flavorModal.classList.add('active');
-    }
-
-    function closeFlavorModal() {
-      flavorModal.classList.remove('active');
-    }
-
-    function openToppingsModal() {
+    function closeMeowModal(){meowModal.classList.remove('active');}
+    function openWelcomeModal(){welcomeModal.classList.add('active');}
+    function closeWelcomeModal(){welcomeModal.classList.remove('active');}
+    function openFlavorModal(){flavorModal.classList.add('active');}
+    function closeFlavorModal(){flavorModal.classList.remove('active');}
+    function openToppingsModal(){
       closeFlavorModal();
       toppingsModal.classList.add('active');
     }
-
-    function closeToppingsModal() {
-      toppingsModal.classList.remove('active');
-    }
-
-    function startQuizOne() {
+    function closeToppingsModal(){toppingsModal.classList.remove('active');}
+    function startQuizOne(){
       closeToppingsModal();
-      window.open('https://l1nk.dev/v815t07', '_blank');
+      window.open('https://docs.google.com/document/d/1VANo_rGW5OnFEn5xWOJelOFYBp165zf-HpLsalHpuzI/edit?tab=t.0','_blank');
     }
-
-    function startQuizTwo() {
-      quizTwoModal.classList.add('active');
-    }
-
-    function closeQuizTwoModal() {
-      quizTwoModal.classList.remove('active');
-    }
-
-    function checkPassword(event) {
-      if (event.key === 'Enter') {
-        const val = passwordInput.value.trim();
-        if (val === 'cat-blender') {
+    function startQuizTwo(){quizTwoModal.classList.add('active');}
+    function closeQuizTwoModal(){quizTwoModal.classList.remove('active');}
+    function checkPassword(event){
+      if(event.key==='Enter'){
+        const val=passwordInput.value.trim();
+        if(val==='cat-blender'){
           playClickSound();
           closePasswordModal();
           titleScreen.classList.remove('active');
           mainScreen.classList.add('active');
-        } else {
+        }else{
           passWindow.classList.remove('shake');
-          setTimeout(function() {
-            passWindow.classList.add('shake');
-          }, 10);
-          passwordInput.value = '';
+          setTimeout(function(){passWindow.classList.add('shake');},10);
+          passwordInput.value='';
         }
       }
     }
-
-    function toggleMusic() {
-      if (isPlaying) {
+    function toggleMusic(){
+      if(isPlaying){
         bgMusic.pause();
         diskBtn.classList.remove('playing');
-        isPlaying = false;
-      } else {
-        bgMusic.play().catch(function(e) {});
+        isPlaying=false;
+      }else{
+        bgMusic.play().catch(function(e){});
         diskBtn.classList.add('playing');
-        isPlaying = true;
+        isPlaying=true;
       }
     }
+    document.addEventListener('visibilitychange',function(){
+      if(document.hidden&&isPlaying){
+        bgMusic.pause();
+        diskBtn.classList.remove('playing');
+        isPlaying=false;
+      }
+    });
   </script>
 </body>
 </html>
