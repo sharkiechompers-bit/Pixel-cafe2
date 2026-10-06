@@ -541,14 +541,12 @@
     }
     function startQuizTwo(){quizTwoModal.classList.add('active');}
     function closeQuizTwoModal(){quizTwoModal.classList.remove('active');}
-    function checkPassword(event){
+  function checkPassword(event){
       if(event.key==='Enter'){
         const val=passwordInput.value.trim();
         if(val==='cat-blender'){
           playClickSound();
-          closePasswordModal();
-          titleScreen.classList.remove('active');
-          mainScreen.classList.add('active');
+          window.location.href = 'main.html';
         }else{
           passWindow.classList.remove('shake');
           setTimeout(function(){passWindow.classList.add('shake');},10);
