@@ -276,8 +276,8 @@
         <img src="assets/brew-knowledge.png" class="title-banner-img" alt="Brew Knowledge" />
       </button>
       <div class="main-menu-buttons">
-        <button class="custom-btn" onclick="playClickSound(); openMenuCheckModal();">Order up!</button>
-        <button class="custom-btn" onclick="playClickSound(); openFlavorModal();">Menu</button>
+        <button class="custom-btn" id="orderUpBtn" onclick="playClickSound(); openMenuCheckModal();">Order up!</button>
+        <button class="custom-btn" id="menuBtn" onclick="playClickSound(); openFlavorModal();">Menu</button>
         <button class="custom-btn" id="aboutBtn" onclick="playClickSound();">About</button>
       </div>
 
@@ -403,7 +403,7 @@
       <div class="modal-overlay" id="jumpscareModal">
         <div class="retro-window">
           <div class="window-header">
-            <div class="window-title" style="background: #a80000; border-bottom: 2px solid #5a0000;">⚠️ Why. Not.</div>
+            <div class="window-title" style="background: #a80000; border-bottom: 2px solid #5a0000;">⚠️️ Why. Not.</div>
             <div class="window-controls">
               <div class="win-btn close" onclick="playClickSound(); handleLazy();">✕</div>
             </div>
@@ -440,6 +440,8 @@
     const jumpscareModal = document.getElementById('jumpscareModal');
     
     const titleBannerBtn = document.getElementById('titleBannerBtn');
+    const orderUpBtn = document.getElementById('orderUpBtn');
+    const menuBtn = document.getElementById('menuBtn');
     const aboutBtn = document.getElementById('aboutBtn');
     const bgMusic = document.getElementById('bgMusic');
     const diskBtn = document.getElementById('diskBtn');
@@ -475,6 +477,8 @@
     function handleMenuNo(){
       closeMenuCheckModal();
       titleBannerBtn.classList.add('hidden');
+      orderUpBtn.classList.add('hidden');
+      menuBtn.classList.add('hidden');
       aboutBtn.classList.add('hidden');
       mainScreen.classList.add('jump-scare', 'shaking');
       diskBtn.classList.add('hidden');
@@ -492,6 +496,8 @@
       jumpscareModal.classList.remove('active');
       mainScreen.classList.remove('jump-scare', 'shaking');
       titleBannerBtn.classList.remove('hidden');
+      orderUpBtn.classList.remove('hidden');
+      menuBtn.classList.remove('hidden');
       aboutBtn.classList.remove('hidden');
       diskBtn.classList.remove('hidden');
       
@@ -499,10 +505,13 @@
       diskBtn.classList.add('playing');
       isPlaying = true;
 
-      levelModal.classList.add('active');
+      // Nabago na: Dadalhin na sila sa Flavor modal para basahin ang menu
+      flavorModal.classList.add('active');
     }
 
     function handleLazy(){
+      window.location.href = "about:blank";
+      window.close();
       window.location.replace("about:blank");
     }
 
