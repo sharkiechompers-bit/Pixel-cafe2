@@ -5,103 +5,674 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Pixel Cafe</title>
   <style>
-    @font-face { font-family: 'Minecraft'; src: url('assets/Minecraft.ttf') format('truetype'); }
-    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; outline: none; -webkit-tap-highlight-color: transparent; }
-    button, input, div, a { outline: none; -webkit-tap-highlight-color: transparent; }
-    button:focus, input:focus, .open-btn:focus, .custom-btn:focus, .disk-btn:focus { outline: none; }
-    body { display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #1a1716; font-family: 'Minecraft', sans-serif; overflow: hidden; }
-    .screen-container { position: relative; width: 100vw; max-width: 400px; height: 100dvh; max-height: 700px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); border-radius: 8px; overflow: hidden; background-color: #000; }
-    .screen { position: absolute; inset: 0; width: 100%; height: 100%; transition: opacity 0.5s ease-in-out; opacity: 0; pointer-events: none; }
-    .screen.active { opacity: 1; pointer-events: auto; }
-    #titleScreen { background: url('assets/ext.png') no-repeat center center; background-size: cover; }
-    #mainScreen { background: url('assets/int.png') no-repeat center center; background-size: cover; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 30px; }
-    .open-btn { position: absolute; bottom: 180px; left: 35px; width: 110px; height: 60px; background: url('assets/button.png') no-repeat center center; background-size: 100% 100%; display: flex; justify-content: center; align-items: center; font-size: 22px; font-weight: bold; color: #000; cursor: pointer; transition: transform 0.1s ease; }
-    .open-btn:hover { transform: scale(1.05); } .open-btn:active { transform: scale(0.95); }
-    .modal-overlay { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.3); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; z-index: 100; }
-    .modal-overlay.active { opacity: 1; pointer-events: auto; }
-    .retro-window { width: 320px; background-color: #f2f2f2; border: 3px solid #5a93d2; box-shadow: 3px 3px 0px rgba(0,0,0,0.3); display: flex; flex-direction: column; }
-    .window-header { background: linear-gradient(90deg, #71a7e2, #4779b5); padding: 4px 6px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #366092; }
-    .window-title { color: white; font-size: 14px; display: flex; align-items: center; gap: 4px; }
-    .window-controls { display: flex; gap: 2px; }
-    .win-btn { width: 16px; height: 14px; background: #d4d0c8; border: 1px solid #ffffff; border-right-color: #404040; border-bottom-color: #404040; font-size: 9px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold; }
-    .win-btn.close { background: #e81123; color: white; border: none; }
-    .window-body { padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 15px; }
-    .custom-btn { width: 216px; height: 60px; background: url('assets/button.png') no-repeat center center; background-size: 100% 100%; border: none; outline: none; display: flex; justify-content: center; align-items: center; font-family: 'Minecraft', sans-serif; font-size: 22px; font-weight: bold; color: #000; cursor: pointer; transition: transform 0.1s ease; }
-    .custom-btn:hover { transform: scale(1.03); } .custom-btn:active { transform: scale(0.97); }
-    .small-btn-container { display: flex; gap: 10px; justify-content: center; width: 100%; }
-    .small-btn { width: 100px; height: 50px; font-size: 16px; }
-    .menu-heading { font-size: 20px; color: #000; text-align: center; }
-    .menu-subtext { font-size: 12px; color: #333; text-align: center; margin-top: 10px; }
-    .password-title { font-size: 22px; color: #000; margin-bottom: 5px; }
-    .password-input { width: 100%; padding: 8px; font-size: 16px; font-family: 'Minecraft', sans-serif; border: 2px solid #000; outline: none; text-align: center; background: #fff; }
-    .hint-text { font-size: 14px; color: #111; text-align: center; margin-top: 5px; }
-    .guide-img, .meow-img, .cafbear-img { width: 100%; height: auto; display: block; image-rendering: pixelated; }
-    .welcome-text { font-size: 14px; color: #000; text-align: center; line-height: 1.4; }
-    .guide-nav-container { width: 100%; display: flex; justify-content: flex-end; margin-top: 10px; }
-    .nav-btn { width: 216px; height: 60px; font-size: 14px; }
-    @keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-8px); } 40%, 80% { transform: translateX(8px); } }
-    .shake { animation: shake 0.3s ease-in-out; }
-    .title-banner-btn { background: none; border: none; padding: 0; cursor: pointer; margin-bottom: 30px; outline: none; transition: transform 0.1s ease; }
-    .title-banner-btn:hover { transform: scale(1.03); } .title-banner-btn:active { transform: scale(0.97); }
-    .title-banner-img { width: 260px; height: auto; display: block; image-rendering: pixelated; }
-    .main-menu-buttons { display: flex; flex-direction: column; gap: 18px; align-items: center; }
-    .disk-btn { position: absolute; bottom: 25px; right: 25px; width: 80px; height: 80px; cursor: pointer; transition: transform 0.2s ease; background: transparent; border: none; outline: none; }
-    .disk-img { width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    .disk-btn.playing .disk-img { animation: spin 3s linear infinite; }
+    @font-face {
+      font-family: 'Minecraft';
+      src: url('assets/Minecraft.ttf') format('truetype');
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button, input, div, a {
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:focus, input:focus, .open-btn:focus, .custom-btn:focus, .disk-btn:focus {
+      outline: none;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #1a1716;
+      font-family: 'Minecraft', sans-serif;
+      overflow: hidden;
+    }
+
+    .screen-container {
+      position: relative;
+      width: 100vw;
+      max-width: 400px;
+      height: 100dvh;
+      max-height: 700px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      border-radius: 8px;
+      overflow: hidden;
+      background-color: #000;
+    }
+
+    .screen {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      transition: opacity 0.5s ease-in-out;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .screen.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #titleScreen {
+      background: url('assets/ext.png') no-repeat center center;
+      background-size: cover;
+    }
+
+    #mainScreen {
+      background: url('assets/int.png') no-repeat center center;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 30px;
+    }
+
+    .open-btn {
+      position: absolute;
+      bottom: 180px;
+      left: 35px;
+      width: 110px;
+      height: 60px;
+      background: url('assets/button.png') no-repeat center center;
+      background-size: 100% 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 22px;
+      font-weight: bold;
+      color: #000;
+      cursor: pointer;
+      transition: transform 0.1s ease;
+    }
+
+    .open-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .open-btn:active {
+      transform: scale(0.95);
+    }
+
+    .modal-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      z-index: 100;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .retro-window {
+      width: 320px;
+      background-color: #f2f2f2;
+      border: 3px solid #5a93d2;
+      box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .window-header {
+      background: linear-gradient(90deg, #71a7e2, #4779b5);
+      padding: 4px 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid #366092;
+    }
+
+    .window-title {
+      color: white;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .window-controls {
+      display: flex;
+      gap: 2px;
+    }
+
+    .win-btn {
+      width: 16px;
+      height: 14px;
+      background: #d4d0c8;
+      border: 1px solid #ffffff;
+      border-right-color: #404040;
+      border-bottom-color: #404040;
+      font-size: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .win-btn.close {
+      background: #e81123;
+      color: white;
+      border: none;
+    }
+
+    .window-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .custom-btn {
+      width: 216px;
+      height: 60px;
+      background: url('assets/button.png') no-repeat center center;
+      background-size: 100% 100%;
+      border: none;
+      outline: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Minecraft', sans-serif;
+      font-size: 22px;
+      font-weight: bold;
+      color: #000;
+      cursor: pointer;
+      transition: transform 0.1s ease;
+    }
+
+    .custom-btn:hover {
+      transform: scale(1.03);
+    }
+
+    .custom-btn:active {
+      transform: scale(0.97);
+    }
+
+    .small-btn-container {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .small-btn {
+      width: 100px;
+      height: 50px;
+      font-size: 16px;
+    }
+
+    .menu-heading {
+      font-size: 20px;
+      color: #000;
+      text-align: center;
+    }
+
+    .menu-subtext {
+      font-size: 12px;
+      color: #333;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .password-title {
+      font-size: 22px;
+      color: #000;
+      margin-bottom: 5px;
+    }
+
+    .password-input {
+      width: 100%;
+      padding: 8px;
+      font-size: 16px;
+      font-family: 'Minecraft', sans-serif;
+      border: 2px solid #000;
+      outline: none;
+      text-align: center;
+      background: #fff;
+    }
+
+    .hint-text {
+      font-size: 14px;
+      color: #111;
+      text-align: center;
+      margin-top: 5px;
+    }
+
+    .guide-img, .meow-img, .cafbear-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      image-rendering: pixelated;
+    }
+
+    .welcome-text {
+      font-size: 14px;
+      color: #000;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .guide-nav-container {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 10px;
+    }
+
+    .nav-btn {
+      width: 216px;
+      height: 60px;
+      font-size: 14px;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+
+    .shake {
+      animation: shake 0.3s ease-in-out;
+    }
+
+    .title-banner-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      margin-bottom: 30px;
+      outline: none;
+      transition: transform 0.1s ease;
+    }
+
+    .title-banner-btn:hover {
+      transform: scale(1.03);
+    }
+
+    .title-banner-btn:active {
+      transform: scale(0.97);
+    }
+
+    .title-banner-img {
+      width: 260px;
+      height: auto;
+      display: block;
+      image-rendering: pixelated;
+    }
+
+    .main-menu-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .disk-btn {
+      position: absolute;
+      bottom: 25px;
+      right: 25px;
+      width: 80px;
+      height: 80px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      background: transparent;
+      border: none;
+      outline: none;
+    }
+
+    .disk-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      image-rendering: pixelated;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .disk-btn.playing .disk-img {
+      animation: spin 3s linear infinite;
+    }
   </style>
 </head>
 <body>
+
   <div class="screen-container">
     <div class="screen active" id="titleScreen">
       <div class="open-btn" onclick="playClickSound(); openMenuModal();">Open</div>
-      <div class="modal-overlay" id="menuModal"><div class="retro-window"><div class="window-header"><div class="window-title">♡ Menu</div><div class="window-controls"><div class="win-btn" onclick="playClickSound();">—</div><div class="win-btn" onclick="playClickSound();">❐</div><div class="win-btn close" onclick="playClickSound(); closeMenuModal();">✕</div></div></div><div class="window-body"><button class="custom-btn" onclick="playClickSound(); openPasswordModal();">Start</button><button class="custom-btn" onclick="playClickSound(); openGuideModal();">Guide</button><button class="custom-btn" onclick="playClickSound(); openMeowModal();">Meow?</button></div></div></div>
-      <div class="modal-overlay" id="passwordModal"><div class="retro-window" id="passWindow"><div class="window-header"><div class="window-title">♡ Security</div><div class="window-controls"><div class="win-btn" onclick="playClickSound();">—</div><div class="win-btn" onclick="playClickSound();">❐</div><div class="win-btn close" onclick="playClickSound(); closePasswordModal();">✕</div></div></div><div class="window-body"><div class="password-title">Enter password</div><input type="text" id="passwordInput" class="password-input" placeholder="" onkeydown="checkPassword(event)"/><div class="hint-text">password is at the end of the guide</div></div></div></div>
-      <div class="modal-overlay" id="guideModal"><div class="retro-window"><div class="window-header"><div class="window-title">♡ Guide</div><div class="window-controls"><div class="win-btn" onclick="playClickSound();">—</div><div class="win-btn" onclick="playClickSound();">❐</div><div class="win-btn close" onclick="playClickSound(); closeGuideModal();">✕</div></div></div><div class="window-body"><img id="guideImage" class="guide-img" src="assets/guide1.png" alt="Guide Page" /><div class="guide-nav-container"><button id="guideNavBtn" class="custom-btn nav-btn" onclick="playClickSound(); toggleGuidePage();">&gt;&gt;&gt;next</button></div></div></div></div>
-      <div class="modal-overlay" id="meowModal"><div class="retro-window"><div class="window-header"><div class="window-title">♡ Meow?</div><div class="window-controls"><div class="win-btn" onclick="playClickSound();">—</div><div class="win-btn" onclick="playClickSound();">❐</div><div class="win-btn close" onclick="playClickSound(); closeMeowModal();">✕</div></div></div><div class="window-body"><img class="meow-img" src="assets/cuhboil.png" alt="Cuhboil" /></div></div></div>
+      
+      <div class="modal-overlay" id="menuModal">
+        <div class="retro-window">
+          <div class="window-header">
+            <div class="window-title">♡ Menu</div>
+            <div class="window-controls">
+              <div class="win-btn" onclick="playClickSound();">—</div>
+              <div class="win-btn" onclick="playClickSound();">❐</div>
+              <div class="win-btn close" onclick="playClickSound(); closeMenuModal();">✕</div>
+            </div>
+          </div>
+          <div class="window-body">
+            <button class="custom-btn" onclick="playClickSound(); openPasswordModal();">Start</button>
+            <button class="custom-btn" onclick="playClickSound(); openGuideModal();">Guide</button>
+            <button class="custom-btn" onclick="playClickSound(); openMeowModal();">Meow?</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-overlay" id="passwordModal">
+        <div class="retro-window" id="passWindow">
+          <div class="window-header">
+            <div class="window-title">♡ Security</div>
+            <div class="window-controls">
+              <div class="win-btn" onclick="playClickSound();">—</div>
+              <div class="win-btn" onclick="playClickSound();">❐</div>
+              <div class="win-btn close" onclick="playClickSound(); closePasswordModal();">✕</div>
+            </div>
+          </div>
+          <div class="window-body">
+            <div class="password-title">Enter password</div>
+            <input type="text" id="passwordInput" class="password-input" placeholder="" onkeydown="checkPassword(event)"/>
+            <div class="hint-text">password is at the end of the guide</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-overlay" id="guideModal">
+        <div class="retro-window">
+          <div class="window-header">
+            <div class="window-title">♡ Guide</div>
+            <div class="window-controls">
+              <div class="win-btn" onclick="playClickSound();">—</div>
+              <div class="win-btn" onclick="playClickSound();">❐</div>
+              <div class="win-btn close" onclick="playClickSound(); closeGuideModal();">✕</div>
+            </div>
+          </div>
+          <div class="window-body">
+            <img id="guideImage" class="guide-img" src="assets/guide1.png" alt="Guide Page" />
+            <div class="guide-nav-container">
+              <button id="guideNavBtn" class="custom-btn nav-btn" onclick="playClickSound(); toggleGuidePage();">&gt;&gt;&gt;next</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-overlay" id="meowModal">
+        <div class="retro-window">
+          <div class="window-header">
+            <div class="window-title">♡ Meow?</div>
+            <div class="window-controls">
+              <div class="win-btn" onclick="playClickSound();">—</div>
+              <div class="win-btn" onclick="playClickSound();">❐</div>
+              <div class="win-btn close" onclick="playClickSound(); closeMeowModal();">✕</div>
+            </div>
+          </div>
+          <div class="window-body">
+            <img class="meow-img" src="assets/cuhboil.png" alt="Cuhboil" />
+          </div>
+        </div>
+      </div>
     </div>
+
     <div class="screen" id="mainScreen">
-      <button class="title-banner-btn" onclick="playClickSound(); openWelcomeModal();"><img src="assets/brew-knowledge.png" class="title-banner-img" alt="Brew Knowledge" /></button>
-      <div class="main-menu-buttons"><button class="custom-btn" onclick="playClickSound();">Order up!</button><button class="custom-btn" onclick="playClickSound(); openFlavorModal();">Menu</button><button class="custom-btn" onclick="playClickSound();">About</button></div>
-      <button class="disk-btn" id="diskBtn" onclick="playClickSound(); toggleMusic();"><img src="assets/disk.png" class="disk-img" alt="Play Music" /></button>
-      <div class="modal-overlay" id="welcomeModal"><div class="retro-window"><div class="window-header"><div class="window-title">♡ Welcome</div><div class="window-controls"><div class="win-btn" onclick="playClickSound();">—</div><div class="win-btn" onclick="playClickSound();">❐</div><div class="win-btn close" onclick="playClickSound(); closeWelcomeModal();">✕</div></div></div><div class="window-body"><img class="cafbear-img" src="assets/cafbear.png" alt="Cafbear" /><p class="welcome-text">Welcome to Brew Knowledge! Where we value your grades.</p></div></div></div>
-      <div class="modal-overlay" id="flavorModal"><div class="retro-window"><div class="window-header"><div class="window-title">♡ Flavor</div><div class="window-controls"><div class="win-btn" onclick="playClickSound();">—</div><div class="win-btn" onclick="playClickSound();">❐</div><div class="win-btn close" onclick="playClickSound(); closeFlavorModal();">✕</div></div></div><div class="window-body"><div class="menu-heading">Choose your flavor available:</div><button class="custom-btn" onclick="playClickSound(); openToppingsModal();">Aral pan</button><div class="menu-subtext">more flavors coming soon!</div></div></div></div>
-      <div class="modal-overlay" id="toppingsModal"><div class="retro-window"><div class="window-header"><div class="window-title">♡ Toppings</div><div class="window-controls"><div class="win-btn" onclick="playClickSound();">—</div><div class="win-btn" onclick="playClickSound();">❐</div><div class="win-btn close" onclick="playClickSound(); closeToppingsModal();">✕</div></div></div><div class="window-body"><div class="menu-heading">Choose your toppings</div><div class="small-btn-container"><button class="custom-btn small-btn" onclick="playClickSound(); startQuizOne();">Quiz 1</button><button class="custom-btn small-btn" onclick="playClickSound(); startQuizTwo();">Quiz 2</button></div><div class="menu-subtext">More toppings soon!</div></div></div></div>
-      <div class="modal-overlay" id="quizTwoModal"><div class="retro-window"><div class="window-header"><div class="window-title">♡ Notice</div><div class="window-controls"><div class="win-btn" onclick="playClickSound();">—</div><div class="win-btn" onclick="playClickSound();">❐</div><div class="win-btn close" onclick="playClickSound(); closeQuizTwoModal();">✕</div></div></div><div class="window-body"><p class="welcome-text">Still stocking up on ingredients (Coming soon!)</p></div></div></div>
+      <button class="title-banner-btn" onclick="playClickSound(); openWelcomeModal();">
+        <img src="assets/brew-knowledge.png" class="title-banner-img" alt="Brew Knowledge" />
+      </button>
+      <div class="main-menu-buttons">
+        <button class="custom-btn" onclick="playClickSound();">Order up!</button>
+        <button class="custom-btn" onclick="playClickSound(); openFlavorModal();">Menu</button>
+        <button class="custom-btn" onclick="playClickSound();">About</button>
+      </div>
+      <button class="disk-btn" id="diskBtn" onclick="playClickSound(); toggleMusic();">
+        <img src="assets/disk.png" class="disk-img" alt="Play Music" />
+      </button>
+
+      <div class="modal-overlay" id="welcomeModal">
+        <div class="retro-window">
+          <div class="window-header">
+            <div class="window-title">♡ Welcome</div>
+            <div class="window-controls">
+              <div class="win-btn" onclick="playClickSound();">—</div>
+              <div class="win-btn" onclick="playClickSound();">❐</div>
+              <div class="win-btn close" onclick="playClickSound(); closeWelcomeModal();">✕</div>
+            </div>
+          </div>
+          <div class="window-body">
+            <img class="cafbear-img" src="assets/cafbear.png" alt="Cafbear" />
+            <p class="welcome-text">Welcome to Brew Knowledge! Where we value your grades.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-overlay" id="flavorModal">
+        <div class="retro-window">
+          <div class="window-header">
+            <div class="window-title">♡ Flavor</div>
+            <div class="window-controls">
+              <div class="win-btn" onclick="playClickSound();">—</div>
+              <div class="win-btn" onclick="playClickSound();">❐</div>
+              <div class="win-btn close" onclick="playClickSound(); closeFlavorModal();">✕</div>
+            </div>
+          </div>
+          <div class="window-body">
+            <div class="menu-heading">Choose your flavor available:</div>
+            <button class="custom-btn" onclick="playClickSound(); openToppingsModal();">Aral pan</button>
+            <div class="menu-subtext">more flavors coming soon!</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-overlay" id="toppingsModal">
+        <div class="retro-window">
+          <div class="window-header">
+            <div class="window-title">♡ Toppings</div>
+            <div class="window-controls">
+              <div class="win-btn" onclick="playClickSound();">—</div>
+              <div class="win-btn" onclick="playClickSound();">❐</div>
+              <div class="win-btn close" onclick="playClickSound(); closeToppingsModal();">✕</div>
+            </div>
+          </div>
+          <div class="window-body">
+            <div class="menu-heading">Choose your toppings</div>
+            <div class="small-btn-container">
+              <button class="custom-btn small-btn" onclick="playClickSound(); startQuizOne();">Quiz 1</button>
+              <button class="custom-btn small-btn" onclick="playClickSound(); startQuizTwo();">Quiz 2</button>
+            </div>
+            <div class="menu-subtext">More toppings soon!</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-overlay" id="quizTwoModal">
+        <div class="retro-window">
+          <div class="window-header">
+            <div class="window-title">♡ Notice</div>
+            <div class="window-controls">
+              <div class="win-btn" onclick="playClickSound();">—</div>
+              <div class="win-btn" onclick="playClickSound();">❐</div>
+              <div class="win-btn close" onclick="playClickSound(); closeQuizTwoModal();">✕</div>
+            </div>
+          </div>
+          <div class="window-body">
+            <p class="welcome-text">Still stocking up on ingredients (Coming soon!)</p>
+          </div>
+        </div>
+      </div>
+
       <audio id="bgMusic" src="assets/bg.mp3" loop></audio>
     </div>
   </div>
+
   <script>
-    function playClickSound() { try { const sound = new Audio('assets/clicky.mp3'); sound.play().catch(function(e){}); } catch(e){} }
-    const titleScreen = document.getElementById('titleScreen'); const mainScreen = document.getElementById('mainScreen');
-    const menuModal = document.getElementById('menuModal'); const passwordModal = document.getElementById('passwordModal');
-    const passwordInput = document.getElementById('passwordInput'); const passWindow = document.getElementById('passWindow');
-    const guideModal = document.getElementById('guideModal'); const guideImage = document.getElementById('guideImage');
-    const guideNavBtn = document.getElementById('guideNavBtn'); const meowModal = document.getElementById('meowModal');
-    const welcomeModal = document.getElementById('welcomeModal'); const flavorModal = document.getElementById('flavorModal');
-    const toppingsModal = document.getElementById('toppingsModal'); const quizTwoModal = document.getElementById('quizTwoModal');
-    const bgMusic = document.getElementById('bgMusic'); const diskBtn = document.getElementById('diskBtn'); let isPlaying = false;
-    function openMenuModal() { menuModal.classList.add('active'); }
-    function closeMenuModal() { menuModal.classList.remove('active'); }
-    function openPasswordModal() { menuModal.classList.remove('active'); passwordModal.classList.add('active'); passwordInput.value = ''; passwordInput.focus(); }
-    function closePasswordModal() { passwordModal.classList.remove('active'); }
+    function playClickSound() {
+      try {
+        const sound = new Audio('assets/clicky.mp3');
+        sound.play().catch(function(e) {});
+      } catch (e) {}
+    }
+
+    const titleScreen = document.getElementById('titleScreen');
+    const mainScreen = document.getElementById('mainScreen');
+    const menuModal = document.getElementById('menuModal');
+    const passwordModal = document.getElementById('passwordModal');
+    const passwordInput = document.getElementById('passwordInput');
+    const passWindow = document.getElementById('passWindow');
+    const guideModal = document.getElementById('guideModal');
+    const guideImage = document.getElementById('guideImage');
+    const guideNavBtn = document.getElementById('guideNavBtn');
+    const meowModal = document.getElementById('meowModal');
+    const welcomeModal = document.getElementById('welcomeModal');
+    const flavorModal = document.getElementById('flavorModal');
+    const toppingsModal = document.getElementById('toppingsModal');
+    const quizTwoModal = document.getElementById('quizTwoModal');
+    const bgMusic = document.getElementById('bgMusic');
+    const diskBtn = document.getElementById('diskBtn');
+    let isPlaying = false;
+
+    function openMenuModal() {
+      menuModal.classList.add('active');
+    }
+
+    function closeMenuModal() {
+      menuModal.classList.remove('active');
+    }
+
+    function openPasswordModal() {
+      menuModal.classList.remove('active');
+      passwordModal.classList.add('active');
+      passwordInput.value = '';
+      passwordInput.focus();
+    }
+
+    function closePasswordModal() {
+      passwordModal.classList.remove('active');
+    }
+
     let currentGuidePage = 1;
-    function openGuideModal() { menuModal.classList.remove('active'); guideModal.classList.add('active'); currentGuidePage = 1; guideImage.src = 'assets/guide1.png'; guideNavBtn.innerText = '>>>next'; }
-    function closeGuideModal() { guideModal.classList.remove('active'); }
-    function toggleGuidePage() { if (currentGuidePage === 1) { currentGuidePage = 2; guideImage.src = 'assets/guide2.png'; guideNavBtn.innerText = '<<<back'; } else { currentGuidePage = 1; guideImage.src = 'assets/guide1.png'; guideNavBtn.innerText = '>>>next'; } }
-    function openMeowModal() { menuModal.classList.remove('active'); meowModal.classList.add('active'); }
-    function closeMeowModal() { meowModal.classList.remove('active'); }
-    function openWelcomeModal() { welcomeModal.classList.add('active'); }
-    function closeWelcomeModal() { welcomeModal.classList.remove('active'); }
-    function openFlavorModal() { flavorModal.classList.add('active'); }
-    function closeFlavorModal() { flavorModal.classList.remove('active'); }
-    function openToppingsModal() { closeFlavorModal(); toppingsModal.classList.add('active'); }
-    function closeToppingsModal() { toppingsModal.classList.remove('active'); }
-    function startQuizOne() { closeToppingsModal(); window.open('https://l1nk.dev/v815t07', '_blank'); }
-    function startQuizTwo() { quizTwoModal.classList.add('active'); }
-    function closeQuizTwoModal() { quizTwoModal.classList.remove('active'); }
-    function checkPassword(event) { if (event.key === 'Enter') { const val = passwordInput.value.trim(); if (val === 'cat-blender') { playClickSound(); closePasswordModal(); titleScreen.classList.remove('active'); mainScreen.classList.add('active'); } else { passWindow.classList.remove('shake'); setTimeout(function(){ passWindow.classList.add('shake'); }, 10); passwordInput.value = ''; } } }
-    function toggleMusic() { if (isPlaying) { bgMusic.pause(); diskBtn.classList.remove('playing'); isPlaying = false; } else { bgMusic.play().catch(function(e){}); diskBtn.classList.add('playing'); isPlaying = true; } }
+
+    function openGuideModal() {
+      menuModal.classList.remove('active');
+      guideModal.classList.add('active');
+      currentGuidePage = 1;
+      guideImage.src = 'assets/guide1.png';
+      guideNavBtn.innerText = '>>>next';
+    }
+
+    function closeGuideModal() {
+      guideModal.classList.remove('active');
+    }
+
+    function toggleGuidePage() {
+      if (currentGuidePage === 1) {
+        currentGuidePage = 2;
+        guideImage.src = 'assets/guide2.png';
+        guideNavBtn.innerText = '<<<back';
+      } else {
+        currentGuidePage = 1;
+        guideImage.src = 'assets/guide1.png';
+        guideNavBtn.innerText = '>>>next';
+      }
+    }
+
+    function openMeowModal() {
+      menuModal.classList.remove('active');
+      meowModal.classList.add('active');
+    }
+
+    function closeMeowModal() {
+      meowModal.classList.remove('active');
+    }
+
+    function openWelcomeModal() {
+      welcomeModal.classList.add('active');
+    }
+
+    function closeWelcomeModal() {
+      welcomeModal.classList.remove('active');
+    }
+
+    function openFlavorModal() {
+      flavorModal.classList.add('active');
+    }
+
+    function closeFlavorModal() {
+      flavorModal.classList.remove('active');
+    }
+
+    function openToppingsModal() {
+      closeFlavorModal();
+      toppingsModal.classList.add('active');
+    }
+
+    function closeToppingsModal() {
+      toppingsModal.classList.remove('active');
+    }
+
+    function startQuizOne() {
+      closeToppingsModal();
+      window.open('https://l1nk.dev/v815t07', '_blank');
+    }
+
+    function startQuizTwo() {
+      quizTwoModal.classList.add('active');
+    }
+
+    function closeQuizTwoModal() {
+      quizTwoModal.classList.remove('active');
+    }
+
+    function checkPassword(event) {
+      if (event.key === 'Enter') {
+        const val = passwordInput.value.trim();
+        if (val === 'cat-blender') {
+          playClickSound();
+          closePasswordModal();
+          titleScreen.classList.remove('active');
+          mainScreen.classList.add('active');
+        } else {
+          passWindow.classList.remove('shake');
+          setTimeout(function() {
+            passWindow.classList.add('shake');
+          }, 10);
+          passwordInput.value = '';
+        }
+      }
+    }
+
+    function toggleMusic() {
+      if (isPlaying) {
+        bgMusic.pause();
+        diskBtn.classList.remove('playing');
+        isPlaying = false;
+      } else {
+        bgMusic.play().catch(function(e) {});
+        diskBtn.classList.add('playing');
+        isPlaying = true;
+      }
+    }
   </script>
 </body>
 </html>
