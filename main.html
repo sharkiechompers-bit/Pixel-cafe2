@@ -64,20 +64,14 @@
     }
     @keyframes shake {
       0% { transform: translate(1px, 1px) rotate(0deg); }
-      10% { transform: translate(-1px, -2px) rotate(-1deg); }
       20% { transform: translate(-3px, 0px) rotate(1deg); }
-      30% { transform: translate(3px, 2px) rotate(0deg); }
       40% { transform: translate(1px, -1px) rotate(1deg); }
-      50% { transform: translate(-1px, 2px) rotate(-1deg); }
       60% { transform: translate(-3px, 1px) rotate(0deg); }
-      70% { transform: translate(3px, 1px) rotate(-1deg); }
       80% { transform: translate(-1px, -1px) rotate(1deg); }
-      90% { transform: translate(1px, 2px) rotate(0deg); }
-      100% { transform: translate(1px, -2px) rotate(-1deg); }
+      100% { transform: translate(0px, 0px) rotate(0deg); }
     }
     .shaking {
-      animation: shake 0.5s;
-      animation-iteration-count: infinite;
+      animation: shake 0.4s ease-in-out 1;
     }
     .modal-overlay {
       position: absolute;
@@ -278,13 +272,13 @@
 <body>
   <div class="screen-container">
     <div id="mainScreen">
-      <button class="title-banner-btn" onclick="playClickSound(); openWelcomeModal();">
+      <button class="title-banner-btn" id="titleBannerBtn" onclick="playClickSound(); openWelcomeModal();">
         <img src="assets/brew-knowledge.png" class="title-banner-img" alt="Brew Knowledge" />
       </button>
       <div class="main-menu-buttons">
         <button class="custom-btn" onclick="playClickSound(); openMenuCheckModal();">Order up!</button>
         <button class="custom-btn" onclick="playClickSound(); openFlavorModal();">Menu</button>
-        <button class="custom-btn" onclick="playClickSound();">About</button>
+        <button class="custom-btn" id="aboutBtn" onclick="playClickSound();">About</button>
       </div>
 
       <button class="disk-btn" id="diskBtn" onclick="playClickSound(); toggleMusic();">
@@ -445,6 +439,8 @@
     const levelModal = document.getElementById('levelModal');
     const jumpscareModal = document.getElementById('jumpscareModal');
     
+    const titleBannerBtn = document.getElementById('titleBannerBtn');
+    const aboutBtn = document.getElementById('aboutBtn');
     const bgMusic = document.getElementById('bgMusic');
     const diskBtn = document.getElementById('diskBtn');
     let isPlaying = false;
@@ -463,7 +459,7 @@
 
     function startQuizOne(){
       closeToppingsModal();
-      window.open('https://docs.google.com/document/d/1VANo_rGW5OnFEN5xWOJe1OFYBp165zf-HpLsalHpuzI/edit', '_blank');
+      window.open('https://docs.google.com/document/d/1VANo_rGW5OnFEn5xWOJelOFYBp165zf-HpLsalHpuzI/edit?usp=sharing', '_blank');
     }
     function startQuizTwo(){ quizTwoModal.classList.add('active'); }
     function closeQuizTwoModal(){ quizTwoModal.classList.remove('active'); }
@@ -478,6 +474,8 @@
 
     function handleMenuNo(){
       closeMenuCheckModal();
+      titleBannerBtn.classList.add('hidden');
+      aboutBtn.classList.add('hidden');
       mainScreen.classList.add('jump-scare', 'shaking');
       diskBtn.classList.add('hidden');
       
@@ -493,6 +491,8 @@
     function handleReadIt(){
       jumpscareModal.classList.remove('active');
       mainScreen.classList.remove('jump-scare', 'shaking');
+      titleBannerBtn.classList.remove('hidden');
+      aboutBtn.classList.remove('hidden');
       diskBtn.classList.remove('hidden');
       
       bgMusic.play().catch(function(e){});
@@ -503,7 +503,7 @@
     }
 
     function handleLazy(){
-      window.location.href = "about:blank"; 
+      window.location.replace("about:blank");
     }
 
     function closeLevelModal(){ levelModal.classList.remove('active'); }
